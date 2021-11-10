@@ -18,11 +18,8 @@ namespace RabbitMQProducer
                 };
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
-                channel.QueueDeclare("demo-queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
-                var message = new { Name = "Producer", Message = "Hello!" };
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-                channel.BasicPublish("", "demo-queue", null, body);
-                Thread.Sleep(2000);
+                //QueueProducer.Publish(channel); 
+                DirectExchangePublisher.Publish(channel); 
             }
             
 
