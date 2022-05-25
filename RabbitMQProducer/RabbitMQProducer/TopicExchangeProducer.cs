@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace RabbitMQProducer
 {
-    public static class DirectExchangePublisher
+    public static class TopicExchangeProducer
     {
         public static void Publish(IModel channel)
         {
@@ -15,15 +15,14 @@ namespace RabbitMQProducer
             {
                 {"x-message-ttl", 30000 }
             };
-            channel.ExchangeDeclare("demo-exchange-direct", ExchangeType.Direct, arguments: timeToLeave);
+            channel.ExchangeDeclare("demo-exchange-topic", ExchangeType.Topic, arguments: timeToLeave);
             int count = 0;
             while (true)
             {
                 var message = new { Name = "Producer", Message = $"Hello! Count: {count}" };
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-                channel.BasicPublish("demo-exchange-direct", "account.init", null, body);
+                channel.BasicPublish("demo-exchange-topic", "account.init", null, body);
                 count++;
-                Console.WriteLine("publicou");
                 Thread.Sleep(1000);
             }
         }
